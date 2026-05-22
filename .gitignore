@@ -3,4 +3,6 @@ node_modules/
 out/
 coverage/
 tsconfig.tsbuildinfo
-.env*.local
+.env
+.env.*
+!.env.example
