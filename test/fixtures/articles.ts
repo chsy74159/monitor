@@ -1,34 +1,34 @@
 import type { NewsArticle } from "@/lib/domain/types";
 
 export const bullishNvidiaArticle: NewsArticle = {
-  externalId: "bullish-nvidia-earnings",
+  externalId: "news-1",
   source: "fixture",
-  url: "https://example.com/news/bullish-nvidia-earnings",
-  title: "Nvidia shares rally after strong earnings beat expectations",
-  summary:
-    "Nvidia raised guidance after robust demand drove accelerating revenue growth and expanding margins.",
-  publishedAt: "2026-05-22T13:30:00.000Z",
-  symbols: ["NVDA"]
+  url: "https://example.com/nvda-beats",
+  title: "Nvidia beats expectations and raises guidance on strong AI demand",
+  summary: "Analysts point to record revenue and resilient data center growth.",
+  publishedAt: "2026-05-22T14:00:00.000Z",
+  symbols: ["NVDA"],
+  raw: {}
 };
 
 export const bearishTeslaArticle: NewsArticle = {
-  externalId: "bearish-tesla-guidance",
+  externalId: "news-2",
   source: "fixture",
-  url: "https://example.com/news/bearish-tesla-guidance",
-  title: "Tesla slides as analysts downgrade shares after guidance cut",
-  summary:
-    "Tesla warned of weaker demand, missed margin expectations, and lowered its outlook after delivery concerns.",
-  publishedAt: "2026-05-22T14:00:00.000Z",
-  symbols: ["TSLA"]
+  url: "https://example.com/tesla-cuts",
+  title: "Tesla cuts guidance after weaker deliveries and margin pressure",
+  summary: "The company faces downgrade risk as demand slows.",
+  publishedAt: "2026-05-22T15:00:00.000Z",
+  symbols: ["TSLA"],
+  raw: {}
 };
 
 export const macroArticle: NewsArticle = {
-  externalId: "macro-hot-inflation",
+  externalId: "news-3",
   source: "fixture",
-  url: "https://example.com/news/macro-hot-inflation",
-  title: "Stocks fall as hot inflation pushes Treasury yields higher",
-  summary:
-    "The S&P 500 and Nasdaq retreated as Apple, Microsoft, and Nvidia weighed on the market after higher yields renewed pressure on growth shares.",
-  publishedAt: "2026-05-22T15:00:00.000Z",
-  symbols: []
+  url: "https://example.com/higher-yields",
+  title: "Stocks fall as higher yields and hotter inflation weigh on megacap tech",
+  summary: "The risk-off move pressures SPY, QQQ, Apple, Microsoft, and Nvidia.",
+  publishedAt: "2026-05-22T16:00:00.000Z",
+  symbols: [],
+  raw: {}
 };
