@@ -582,9 +582,11 @@ import { MONITORED_TICKERS } from "@/lib/config/tickers";
 import { attributeArticleToTickers } from "@/lib/domain/ticker-attribution";
 
 describe("attributeArticleToTickers", () => {
-  it("uses explicit provider symbols when available", () => {
+  it("uses explicit provider symbols first when available", () => {
     const article = { ...macroArticle, symbols: ["NVDA", "TSLA", "XYZ"] };
-    expect(attributeArticleToTickers(article, MONITORED_TICKERS).map((match) => match.symbol)).toEqual(["NVDA", "TSLA"]);
+    const matches = attributeArticleToTickers(article, MONITORED_TICKERS);
+    expect(matches.map((match) => match.symbol).slice(0, 2)).toEqual(["NVDA", "TSLA"]);
+    expect(matches.filter((match) => match.relevanceScore === 1).map((match) => match.symbol)).toEqual(["NVDA", "TSLA"]);
   });
 
   it("detects ETF and megacap names in macro news text", () => {
