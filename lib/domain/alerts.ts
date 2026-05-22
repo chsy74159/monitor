@@ -55,7 +55,7 @@ export function detectAlerts(rows: TickerHourlySentiment[], mood: MarketHourlyMo
       windowStart: mood.windowStart,
       alertType: "market_risk_off",
       severity: "critical",
-      message: "Market mood is risk-off with broad negative sentiment.",
+      message: "ETF and mega-cap sentiment indicate a broad risk-off market mood.",
       metrics: { moodScore: mood.moodScore, negativeBreadth: mood.negativeBreadth },
     });
   }

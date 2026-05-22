@@ -1,7 +1,7 @@
 import type { ArticleTickerSentiment, MarketHourlyMood, MarketSnapshot, TickerHourlySentiment } from "@/lib/domain/types";
 
-export const ETF_SYMBOLS = new Set(["SPY", "QQQ", "DIA", "IWM"]);
-export const MEGA_CAP_SYMBOLS = new Set(["NVDA", "AAPL", "MSFT", "META", "GOOGL", "AMZN", "AVGO"]);
+const ETF_SYMBOLS = new Set(["SPY", "QQQ", "DIA", "IWM"]);
+const MEGA_CAP_SYMBOLS = new Set(["NVDA", "AAPL", "MSFT", "META", "GOOGL", "AMZN", "AVGO"]);
 
 interface AggregateInput {
   windowStart: string;
