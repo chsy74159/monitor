@@ -4,7 +4,9 @@ export function detectAlerts(rows: TickerHourlySentiment[], mood: MarketHourlyMo
   const alerts: AlertEvent[] = [];
 
   for (const row of rows) {
-    if (row.sentimentVelocity <= -0.5) {
+    const hasCurrentSentiment = row.newsCount > 0 && row.avgSentiment !== null;
+
+    if (hasCurrentSentiment && row.sentimentVelocity <= -0.5) {
       alerts.push({
         symbol: row.symbol,
         windowStart: row.windowStart,
@@ -15,7 +17,7 @@ export function detectAlerts(rows: TickerHourlySentiment[], mood: MarketHourlyMo
       });
     }
 
-    if (row.sentimentVelocity >= 0.5) {
+    if (hasCurrentSentiment && row.sentimentVelocity >= 0.5) {
       alerts.push({
         symbol: row.symbol,
         windowStart: row.windowStart,

@@ -40,7 +40,7 @@ describe("aggregation", () => {
   it("calculates risk-on market mood from ETF and megacap strength", () => {
     const rows = aggregateTickerSentiment({
       windowStart: snapshotWindow,
-      tickers: ["SPY", "QQQ", "NVDA", "TSLA"],
+      tickers: ["SPY", "QQQ", "NVDA", "TSLA", "AMD"],
       sentiments: articleSentiments,
       snapshots: marketSnapshots,
       previous24hNewsAverage: new Map(),
@@ -49,5 +49,25 @@ describe("aggregation", () => {
     const mood = calculateMarketMood(rows);
     expect(mood.moodLabel).toBe("risk_on");
     expect(mood.topPositive[0].symbol).toBe("NVDA");
+    expect(mood.topPositive.map((row) => row.symbol)).not.toContain("AMD");
+    expect(mood.topNegative.map((row) => row.symbol)).not.toContain("AMD");
+  });
+
+  it("does not create sentiment velocity when the current hour has no scored news", () => {
+    const [row] = aggregateTickerSentiment({
+      windowStart: snapshotWindow,
+      tickers: ["AMD"],
+      sentiments: [],
+      snapshots: [],
+      previous24hNewsAverage: new Map([["AMD", 2]]),
+      previous4hSentimentAverage: new Map([["AMD", 0.8]]),
+    });
+
+    expect(row).toMatchObject({
+      symbol: "AMD",
+      newsCount: 0,
+      avgSentiment: null,
+      sentimentVelocity: 0,
+    });
   });
 });

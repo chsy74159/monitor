@@ -38,4 +38,25 @@ describe("detectAlerts", () => {
       expect.arrayContaining(["sentiment_drop", "news_volume_spike", "price_sentiment_divergence", "market_risk_off"]),
     );
   });
+
+  it("does not emit velocity alerts for tickers with no current scored news", () => {
+    const quietRows: TickerHourlySentiment[] = [
+      {
+        symbol: "AMD",
+        windowStart,
+        newsCount: 0,
+        avgSentiment: null,
+        positiveCount: 0,
+        negativeCount: 0,
+        neutralCount: 0,
+        mentionHeat: 0,
+        sentimentVelocity: -0.8,
+        priceChangePercent: null,
+      },
+    ];
+
+    expect(detectAlerts(quietRows, { ...mood, moodLabel: "neutral" }).map((alert) => alert.alertType)).not.toContain(
+      "sentiment_drop",
+    );
+  });
 });

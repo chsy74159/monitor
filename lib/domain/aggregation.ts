@@ -24,6 +24,7 @@ export function aggregateTickerSentiment(input: AggregateInput): TickerHourlySen
   return input.tickers.map((symbol) => {
     const rows = input.sentiments.filter((item) => item.symbol === symbol);
     const avgSentiment = average(rows.map((row) => row.sentimentScore));
+    const roundedAvgSentiment = avgSentiment === null ? null : Number(avgSentiment.toFixed(3));
     const historicalNewsAverage = input.previous24hNewsAverage.get(symbol) ?? 0;
     const previousSentiment = input.previous4hSentimentAverage.get(symbol) ?? 0;
     const snapshot = input.snapshots.find((item) => item.symbol === symbol);
@@ -32,12 +33,12 @@ export function aggregateTickerSentiment(input: AggregateInput): TickerHourlySen
       symbol,
       windowStart: input.windowStart,
       newsCount: rows.length,
-      avgSentiment: avgSentiment === null ? null : Number(avgSentiment.toFixed(3)),
+      avgSentiment: roundedAvgSentiment,
       positiveCount: rows.filter((row) => row.sentimentLabel === "positive").length,
       negativeCount: rows.filter((row) => row.sentimentLabel === "negative").length,
       neutralCount: rows.filter((row) => row.sentimentLabel === "neutral").length,
       mentionHeat: historicalNewsAverage > 0 ? Number((rows.length / historicalNewsAverage).toFixed(2)) : rows.length,
-      sentimentVelocity: Number(((avgSentiment ?? 0) - previousSentiment).toFixed(3)),
+      sentimentVelocity: roundedAvgSentiment === null ? 0 : Number((roundedAvgSentiment - previousSentiment).toFixed(3)),
       priceChangePercent: snapshot?.changePercent ?? null,
     };
   });
@@ -53,8 +54,9 @@ export function calculateMarketMood(rows: TickerHourlySentiment[]): MarketHourly
     rows.length === 0 ? 0 : rows.filter((row) => (row.avgSentiment ?? 0) >= 0.2).length / rows.length;
   const negativeBreadth =
     rows.length === 0 ? 0 : rows.filter((row) => (row.avgSentiment ?? 0) <= -0.2).length / rows.length;
-  const topPositive = [...rows].sort((a, b) => (b.avgSentiment ?? -99) - (a.avgSentiment ?? -99)).slice(0, 5);
-  const topNegative = [...rows].sort((a, b) => (a.avgSentiment ?? 99) - (b.avgSentiment ?? 99)).slice(0, 5);
+  const scoredRows = rows.filter((row) => row.avgSentiment !== null);
+  const topPositive = [...scoredRows].sort((a, b) => (b.avgSentiment ?? -99) - (a.avgSentiment ?? -99)).slice(0, 5);
+  const topNegative = [...scoredRows].sort((a, b) => (a.avgSentiment ?? 99) - (b.avgSentiment ?? 99)).slice(0, 5);
 
   return {
     windowStart: rows[0]?.windowStart ?? new Date().toISOString(),
