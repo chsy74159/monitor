@@ -26,6 +26,15 @@ function articleText(article: NewsArticle): string {
   return `${article.title} ${article.summary ?? ""}`.toLowerCase();
 }
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function includesBoundedAlias(text: string, alias: string): boolean {
+  const escapedAlias = escapeRegExp(alias.toLowerCase());
+  return new RegExp(`(^|[^a-z0-9])${escapedAlias}([^a-z0-9]|$)`).test(text);
+}
+
 export function attributeArticleToTickers(article: NewsArticle, tickers: TickerConfig[]): TickerAttribution[] {
   const allowedSymbols = new Set(tickers.map((ticker) => ticker.symbol));
   const explicitSymbols = article.symbols.filter((symbol) => allowedSymbols.has(symbol));
@@ -33,7 +42,7 @@ export function attributeArticleToTickers(article: NewsArticle, tickers: TickerC
   const detected = tickers
     .filter((ticker) => {
       const aliases = [ticker.symbol.toLowerCase(), ticker.name.toLowerCase(), ...(EXTRA_ALIASES[ticker.symbol] ?? [])];
-      return aliases.some((alias) => text.includes(alias));
+      return aliases.some((alias) => includesBoundedAlias(text, alias));
     })
     .map((ticker) => ticker.symbol);
 

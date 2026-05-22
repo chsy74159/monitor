@@ -19,4 +19,15 @@ describe("attributeArticleToTickers", () => {
     const matches = attributeArticleToTickers(macroArticle, MONITORED_TICKERS);
     expect(matches.map((match) => match.symbol)).toEqual(expect.arrayContaining(["SPY", "QQQ", "AAPL", "MSFT", "NVDA"]));
   });
+
+  it("does not match ticker symbols inside unrelated words", () => {
+    const article = {
+      ...macroArticle,
+      title: "Nvidia demand accelerates while spying concerns fade",
+      summary: "A technology note mentions broad momentum without index ETF symbols.",
+      symbols: []
+    };
+
+    expect(attributeArticleToTickers(article, MONITORED_TICKERS).map((match) => match.symbol)).toEqual(["NVDA"]);
+  });
 });
