@@ -98,3 +98,26 @@ Run the local checks:
 ```
 
 Use `supabase db reset` to validate migrations locally when Docker and the local Supabase stack are available.
+
+## Deployment
+
+Deploy the app to Vercel with these environment variables:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+SUPABASE_SERVICE_ROLE_KEY
+FINNHUB_API_KEY
+MARKETAUX_API_KEY
+CRON_SECRET
+APP_BASE_URL
+```
+
+After deployment:
+
+1. Apply the Supabase migration.
+2. Set the database settings used by `supabase/sql/schedule_hourly_ingest.sql`.
+3. Run the scheduling SQL in the Supabase SQL editor or through `psql`.
+4. Trigger `POST /api/cron/hourly-ingest` once with `Authorization: Bearer $CRON_SECRET`.
+5. Confirm rows exist in `market_snapshots`, `news_articles`, `ticker_hourly_sentiment`, and `market_hourly_mood`.
+6. Open the deployed dashboard and confirm the latest timestamp updates.
