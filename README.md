@@ -7,7 +7,7 @@ Hourly news-first sentiment monitoring for US market ETFs and mega-cap stocks. T
 1. Install dependencies:
 
 ```powershell
-D:\Program Files\nodejs\npm.cmd install
+& 'D:\Program Files\nodejs\npm.cmd' install
 ```
 
 2. Copy environment variables from `.env.example` into `.env.local` and fill local values:
@@ -25,7 +25,7 @@ APP_BASE_URL=http://localhost:3000
 3. Run the app:
 
 ```powershell
-D:\Program Files\nodejs\npm.cmd run dev
+& 'D:\Program Files\nodejs\npm.cmd' run dev
 ```
 
 The Supabase CLI is installed as a local dev dependency and is available through `npx supabase`; do not install it globally for this project.
@@ -37,13 +37,13 @@ The initial schema lives in `supabase/migrations/20260522000000_initial_schema.s
 Apply migrations to a linked Supabase project:
 
 ```powershell
-D:\Program Files\nodejs\npx.cmd supabase db push
+& 'D:\Program Files\nodejs\npx.cmd' supabase db push
 ```
 
 For a local database reset:
 
 ```powershell
-D:\Program Files\nodejs\npx.cmd supabase db reset
+& 'D:\Program Files\nodejs\npx.cmd' supabase db reset
 ```
 
 `supabase db reset` requires a local Supabase stack, including Docker. If Docker or local Supabase config is missing, start/configure the local stack first with `npx supabase init` and `npx supabase start`.
@@ -90,11 +90,11 @@ with the header `Authorization: Bearer <cron_secret>`.
 Run the local checks:
 
 ```powershell
-D:\Program Files\nodejs\npm.cmd run typecheck
-D:\Program Files\nodejs\npm.cmd run lint
-D:\Program Files\nodejs\npx.cmd supabase --help
-D:\Program Files\nodejs\npx.cmd supabase migration --help
-D:\Program Files\nodejs\npx.cmd supabase db reset
+& 'D:\Program Files\nodejs\npm.cmd' run typecheck
+& 'D:\Program Files\nodejs\npm.cmd' run lint
+& 'D:\Program Files\nodejs\npx.cmd' supabase --help
+& 'D:\Program Files\nodejs\npx.cmd' supabase migration --help
+& 'D:\Program Files\nodejs\npx.cmd' supabase db reset
 ```
 
 Use `supabase db reset` to validate migrations locally when Docker and the local Supabase stack are available.

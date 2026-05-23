@@ -27,13 +27,13 @@ create table if not exists public.news_articles (
   id uuid primary key default gen_random_uuid(),
   external_id text,
   source text not null,
-  url text not null unique,
+  url text not null,
   title text not null,
   summary text,
   published_at timestamptz,
   raw jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now(),
-  unique (source, external_id)
+  unique (source, url)
 );
 
 create table if not exists public.article_tickers (
@@ -82,8 +82,9 @@ create table if not exists public.topic_clusters (
   id uuid primary key default gen_random_uuid(),
   window_start timestamptz not null,
   label text not null,
-  summary text not null,
+  summary text,
   symbols text[] not null default '{}'::text[],
+  article_ids uuid[] not null default '{}'::uuid[],
   score numeric(10, 4) not null default 0,
   created_at timestamptz not null default now(),
   unique (window_start, label)
@@ -121,7 +122,7 @@ create index if not exists ticker_hourly_sentiment_symbol_window_idx
   on public.ticker_hourly_sentiment (symbol, window_start desc);
 
 create index if not exists alert_events_window_idx
-  on public.alert_events (window_start desc, severity);
+  on public.alert_events (window_start desc);
 
 alter table public.tickers enable row level security;
 alter table public.market_snapshots enable row level security;
