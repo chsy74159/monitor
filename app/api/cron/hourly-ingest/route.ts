@@ -15,7 +15,7 @@ function authorized(request: NextRequest): boolean {
   return Boolean(expected && header === `Bearer ${expected}`);
 }
 
-export async function POST(request: NextRequest) {
+async function handleIngestRequest(request: NextRequest) {
   if (!authorized(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -35,4 +35,12 @@ export async function POST(request: NextRequest) {
     console.error(error);
     return NextResponse.json({ error: "Unable to run hourly ingest" }, { status: 500 });
   }
+}
+
+export async function GET(request: NextRequest) {
+  return handleIngestRequest(request);
+}
+
+export async function POST(request: NextRequest) {
+  return handleIngestRequest(request);
 }
