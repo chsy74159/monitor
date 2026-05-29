@@ -1,0 +1,19 @@
+name: Hourly ingest
+
+on:
+  schedule:
+    - cron: "5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  trigger-ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger market sentiment ingest
+        env:
+          INGEST_URL: ${{ secrets.INGEST_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          curl --fail --show-error --silent \
+            --request POST "$INGEST_URL" \
+            --header "Authorization: Bearer $CRON_SECRET"
